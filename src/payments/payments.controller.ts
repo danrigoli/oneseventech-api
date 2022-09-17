@@ -1,19 +1,39 @@
-import { Body, Controller, HttpStatus, Param, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { Response } from 'express';
-import { Product } from './models/product';
+import { CartItem } from './models/cart-item';
 
 @Controller('payments')
 export class PaymentsController {
   constructor(private paymentService: PaymentsService) {}
 
-  @Post()
-  createPayments(
+  @Get(':paymentIntentId')
+  getPayments(
     @Res() response: Response,
-    @Body() paymentRequestBody: Product[],
+    @Param('paymentIntentId') paymentIntentId: string,
   ) {
     this.paymentService
-      .createPayment(paymentRequestBody)
+      .getPayment(paymentIntentId)
+      .then((res) => {
+        response.status(HttpStatus.CREATED).json(res);
+      })
+      .catch((err) => {
+        response.status(HttpStatus.BAD_REQUEST).json(err);
+      });
+  }
+
+  @Post()
+  createPayments(@Res() response: Response, @Body() items: CartItem[]) {
+    this.paymentService
+      .createPayment(items)
       .then((res) => {
         response.status(HttpStatus.CREATED).json(res);
       })

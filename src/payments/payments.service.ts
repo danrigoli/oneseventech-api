@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
-import { Product } from './models/product';
+import { CartItem } from './models/cart-item';
 
 @Injectable()
 export class PaymentsService {
@@ -12,11 +12,17 @@ export class PaymentsService {
     });
   }
 
-  createPayment(
-    products: Product[],
+  getPayment(
+    paymentIntentId: string,
   ): Promise<Stripe.Response<Stripe.PaymentIntent>> {
-    const total = products.reduce((acc, product) => {
-      return acc + product.data.price * product.quantity;
+    return this.stripe.paymentIntents.retrieve(paymentIntentId);
+  }
+
+  createPayment(
+    items: CartItem[],
+  ): Promise<Stripe.Response<Stripe.PaymentIntent>> {
+    const total = items.reduce((acc, item) => {
+      return acc + item.product.price * item.quantity;
     }, 0);
     return this.stripe.paymentIntents.create({
       amount: total * 100,
