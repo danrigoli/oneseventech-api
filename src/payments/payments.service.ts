@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
 import { CartItem } from './models/cart-item';
+import { PaymentMethod } from './models/payment-method';
 
 @Injectable()
 export class PaymentsService {
@@ -34,7 +35,7 @@ export class PaymentsService {
 
   async confirmPayment(
     paymentIntentId: string,
-    paymentMethodData: any,
+    paymentMethodData: PaymentMethod,
   ): Promise<Stripe.Response<Stripe.PaymentIntent>> {
     const paymentMethod = await this.stripe.paymentMethods.create({
       type: 'card',

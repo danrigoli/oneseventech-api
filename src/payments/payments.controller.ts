@@ -1,6 +1,7 @@
 import { Body, Controller, Get, HttpCode, Param, Post } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { CartItem } from './models/cart-item';
+import { PaymentMethod } from './models/payment-method';
 
 @Controller('payments')
 export class PaymentsController {
@@ -22,7 +23,7 @@ export class PaymentsController {
   @HttpCode(200)
   confirmPayment(
     @Param('paymentIntentId') paymentIntentId: string,
-    @Body() paymentMethod: any,
+    @Body() paymentMethod: PaymentMethod,
   ) {
     return this.paymentService.confirmPayment(paymentIntentId, paymentMethod);
   }
