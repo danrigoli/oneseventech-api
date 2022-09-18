@@ -32,14 +32,25 @@ export class PaymentsService {
 
   async confirmPayment(
     paymentIntentId: string,
+    paymentMethodData: any,
   ): Promise<Stripe.Response<Stripe.PaymentIntent>> {
     const paymentMethod = await this.stripe.paymentMethods.create({
       type: 'card',
       card: {
-        number: '4242424242424242',
-        exp_month: 9,
-        exp_year: 2023,
-        cvc: '314',
+        number: paymentMethodData.cardNumber,
+        exp_month: paymentMethodData.expiryMonth,
+        exp_year: paymentMethodData.expiryYear,
+        cvc: paymentMethodData.cvc,
+      },
+      billing_details: {
+        name: paymentMethodData.name,
+        address: {
+          line1: paymentMethodData.address,
+          city: paymentMethodData.city,
+          state: paymentMethodData.state,
+          postal_code: paymentMethodData.zip,
+          country: 'US',
+        },
       },
     });
 
