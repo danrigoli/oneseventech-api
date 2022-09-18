@@ -21,11 +21,13 @@ export class PaymentsService {
   createPayment(
     items: CartItem[],
   ): Promise<Stripe.Response<Stripe.PaymentIntent>> {
-    const total = items.reduce((acc, item) => {
+    const subtotal = items.reduce((acc, item) => {
       return acc + item.product.price * item.quantity;
     }, 0);
+
+    const total = subtotal * 1.06 * 100;
     return this.stripe.paymentIntents.create({
-      amount: total * 100,
+      amount: Number(total.toFixed(0)),
       currency: 'usd',
     });
   }
