@@ -33,6 +33,11 @@ $ npm install
 ```
 
 ## Running the app
+You need a Stripe secret key in order to use this API.
+```bash
+# Copy the .env.example file into .env
+cp .env.example .env
+```
 
 ```bash
 # development
