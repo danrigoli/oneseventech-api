@@ -4,6 +4,7 @@ export interface PaymentMethod {
   city: string;
   state: string;
   zip: string;
+  country: string;
   cardNumber: string;
   expiryMonth: number;
   expiryYear: number;

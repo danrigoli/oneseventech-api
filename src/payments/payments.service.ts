@@ -52,7 +52,7 @@ export class PaymentsService {
           city: paymentMethodData.city,
           state: paymentMethodData.state,
           postal_code: paymentMethodData.zip,
-          country: 'US',
+          country: paymentMethodData.country,
         },
       },
     });
